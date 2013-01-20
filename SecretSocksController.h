@@ -47,8 +47,7 @@
 	IBOutlet NSDrawer *passwordDrawer;
 	IBOutlet NSTextField *passwordField2;
 
-    NSThread *sshThread;
-    NSString *key;
+
 	ssh_interface *sshInterface;
 	bool isConnected;
 	bool windowHasBeenClosed;
@@ -80,7 +79,7 @@
 //Add by Ling
 -(bool)doAutoConnect;
 -(IBAction)stateChanged:(id)sender;
--(void)quitApp;
+-(void)quitApp:(id)sender;
 -(bool)checkConnection;
 -(void)showDisableIcon;
 -(void)showEnableIcon;

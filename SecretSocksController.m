@@ -79,8 +79,13 @@
 			// standalone passwd has priority if drawer is open
 		    [passwordField setStringValue: [passwordField2 stringValue]];
 		}
-		else if ([[passwordField stringValue] length] == 0) {
-			if ([[passwordField2 stringValue] length] == 0)  {
+        // If the user wants to try public/private keys first,
+        // no point to prompt for password
+		else if ([[passwordField stringValue] length] == 0 &&
+                 [isAsyncKeysFirst state] == NSOffState)
+        {
+			//
+            if ([[passwordField2 stringValue] length] == 0)  {
 				// Neither settings nor standalone has a passwd
 				[passwordDrawer open];
 				return false;
@@ -92,6 +97,7 @@
 			// Copy settings passwd to standalone box
 			[passwordField2 setStringValue: [passwordField stringValue]];
 		}
+
         
         //save the user setting
         [self savePrefs];
@@ -106,6 +112,8 @@
 		[sshInterface setServerSshPasswd:[passwordField stringValue]];
 		// Connect
 		[sshInterface connectToServer:self];
+        
+        isConnected=[self checkConnection];
 		
 		if (isConnected) {
 			[passwordDrawer close];
@@ -127,6 +135,14 @@
 {
     return true;
 }
+
+//save prefs when the check box status changes
+- (IBAction)stateChanged:(id)sender
+{
+    [self savePrefs];
+}
+
+
 
 // This callback is implemented as part of conforming to the ProcessController protocol.
 // It will be called whenever there is output from the TaskWrapper.
@@ -350,6 +366,7 @@
 		[checkmark setImage: image];
 		[disconnectMenu setEnabled:true];
 		[connectMenu setEnabled:false];
+        [image release];
 	} else {
 		// Display open padlock
 		[checkmark setImage: [NSImage imageNamed: NSImageNameLockUnlockedTemplate]];
@@ -368,6 +385,7 @@
     [passwordField setStringValue:[preferences stringForKey:@"password"]];
 	[socksportField setStringValue:[preferences stringForKey:@"socksPort"]];
 	[applyToNetwork setState:[preferences integerForKey:@"applyToNetwork"]];
+    [timeoutField setStringValue:[preferences stringForKey:@"timeout"]];
     [isAsyncKeysFirst setState:[preferences integerForKey:@"isAsyncKeysFirst"]];
     [isAutoLogin setState:[preferences integerForKey:@"isAutoLogin"]];
 }
@@ -381,6 +399,7 @@
     [preferences setObject: [passwordField stringValue] forKey:@"password"];
 	[preferences setObject: [socksportField stringValue] forKey:@"socksPort"];
 	[preferences setInteger: [applyToNetwork state] forKey:@"applyToNetwork"];
+    [preferences setObject:[timeoutField stringValue] forKey:@"timeout"];
     [preferences setInteger:[isAsyncKeysFirst state] forKey:@"isAsyncKeysFirst"];
     [preferences setInteger:[isAutoLogin state] forKey:@"isAutoLogin"];
 	[preferences synchronize];
@@ -397,7 +416,7 @@
     
     //AutoLogin
     if ([isAutoLogin state]==NSOnState) {
-        [self doAutoConnect];
+        [self doConnect:self];
     }
 }
 
@@ -416,7 +435,7 @@
 {
 	// Reize drawer to full height after opening
 	NSSize size = [drawer maxContentSize];
-    size.height+=40;
+    size.height+=60;
 	[drawer setContentSize: size];
 }
 - (BOOL)drawerShouldClose:(NSDrawer *)sender
@@ -484,11 +503,12 @@
 // Make sure to disconnect from SSH when terminating
 - (void)applicationWillTerminate:(NSApplication *)theApplication
 {
-	[self quitApp];
+	[self quitApp:self];
     return;
 }
 
--(void)quitApp:(id)sender{
+-(void)quitApp:(id)sender
+{
     if (isConnected) {
         [sshInterface disconnectFromServer];
         [sshInterface dealloc];
@@ -497,6 +517,7 @@
         [NSApp terminate:sender];
     }
 }
+
 //open window when click
 -(BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
 {
