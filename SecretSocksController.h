@@ -3,7 +3,7 @@
 //  Secret Socks
 //
 //  Created by Joshua Chan on 11/07/09.
-//  Enhanced by Ling Mo on 20/01/2012
+//  Enhanced by Ling Mo on 20/01/2013
 
 #import <Cocoa/Cocoa.h>
 #import "ssh_interface.h"
@@ -36,7 +36,6 @@
     //Add by Ling
     IBOutlet NSButton *isAsyncKeysFirst;
     IBOutlet NSButton *isAutoLogin;
-    IBOutlet NSTextView *helpText;
     
 	IBOutlet NSTextView *statusLabel;
 	IBOutlet NSButton *connectButton;
@@ -85,6 +84,7 @@
 -(bool)checkConnection;
 -(void)showDisableIcon;
 -(void)showEnableIcon;
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag;
 
 
 @end

@@ -3,7 +3,7 @@
 //  Secret Socks
 //
 //  Created by Joshua Chan on 11/07/09.
-//
+//  Enhanced by Ling Mo 20/01/2013
 
 #import "SecretSocksController.h"
 
@@ -24,11 +24,14 @@
 	  @"", @"obfuscationKey",
 	  @"", @"username",
       @"",@"password",
-	  @"9999", @"socksPort",
+	  @"7070", @"socksPort",
+      @"30",@"timeout",
 	  [NSNumber numberWithInt:1], @"applyToNetwork",
+      [NSNumber numberWithInt:1], @"isAsyncKeysFirst",
+      [NSNumber numberWithInt:1], @"isAutoLogin",
 	  nil ]; // terminate the list
 	[preferences registerDefaults:dict];
-
+    
 	return self;
 }
 
@@ -60,13 +63,16 @@
 
 // Respond to clicking the "Connect" button
 - (IBAction)doConnect:(id)sender {
-	[self savePrefs];
+	[self doAutoConnect];
+}
+
+-(bool)doAutoConnect{
 
 	if (!isConnected) {
 		// Make sure hostname settings is present
 		if ([[hostnameField stringValue] length] == 0) {
 			[self showConfig: self];
-			return;
+			return false;
 		}
 		// Get password
 		else if ([passwordDrawer state] == NSDrawerOpenState) {
@@ -77,7 +83,7 @@
 			if ([[passwordField2 stringValue] length] == 0)  {
 				// Neither settings nor standalone has a passwd
 				[passwordDrawer open];
-				return;
+				return false;
 			} else {
 				// Copy standalone passwd to settings
 				[passwordField setStringValue: [passwordField2 stringValue]];
@@ -86,8 +92,9 @@
 			// Copy settings passwd to standalone box
 			[passwordField2 setStringValue: [passwordField stringValue]];
 		}
-
-		isConnected = true;
+        
+        //save the user setting
+        [self savePrefs];
 
 		// Initialize sshInterface with config settings
 		sshInterface = [ssh_interface alloc];
@@ -102,15 +109,24 @@
 		
 		if (isConnected) {
 			[passwordDrawer close];
+            [self showEnableIcon];
 		}
 		
 	} else {
 		// Disconnect
 		[sshInterface disconnectFromServer];
 		[sshInterface dealloc];
+        [self showDisableIcon];
 	}
+    return  isConnected;
 }
 
+// in the near future,i will add code to check the connection status
+// but now just return true;
+- (bool)checkConnection
+{
+    return true;
+}
 
 // This callback is implemented as part of conforming to the ProcessController protocol.
 // It will be called whenever there is output from the TaskWrapper.
@@ -161,10 +177,13 @@
 			}
 		} while (!feof(fh));
 		pclose(fh);
-		hasTimedOut = (abs((int)[timeStarted timeIntervalSinceNow]) > SSH_TIMEOUT);
+        [self appendOutput:@"."];
+		//hasTimedOut = (abs((int)[timeStarted timeIntervalSinceNow]) > SSH_TIMEOUT);
+        hasTimedOut = (abs((int)[timeStarted timeIntervalSinceNow]) > [timeoutField integerValue]);
 	} while (!hasTimedOut && !hasMatch && ![sshInterface hasTerminated]);
 	
 	[busySpin stopAnimation: self];
+    [self appendOutput:@"\n"];
 
 	// Check if socks proxy is open
 	if (hasMatch) {
@@ -307,7 +326,7 @@
 	}
 	
 	int exitCode;
-	if (exitCode = pclose(fh)) {
+	if ((exitCode = pclose(fh))) {
 		printf("networksetup exit with code: %d\n", exitCode);
 	}
 }
@@ -322,6 +341,7 @@
 	[usernameField setEditable: !state];
 	[passwordField setEditable: !state];
 	[socksportField setEditable: !state];
+    [timeoutField setEditable:!state];
 
 	if (state) {
 		// Display check mark
@@ -348,6 +368,8 @@
     [passwordField setStringValue:[preferences stringForKey:@"password"]];
 	[socksportField setStringValue:[preferences stringForKey:@"socksPort"]];
 	[applyToNetwork setState:[preferences integerForKey:@"applyToNetwork"]];
+    [isAsyncKeysFirst setState:[preferences integerForKey:@"isAsyncKeysFirst"]];
+    [isAutoLogin setState:[preferences integerForKey:@"isAutoLogin"]];
 }
 
 - (void)savePrefs
@@ -359,6 +381,8 @@
     [preferences setObject: [passwordField stringValue] forKey:@"password"];
 	[preferences setObject: [socksportField stringValue] forKey:@"socksPort"];
 	[preferences setInteger: [applyToNetwork state] forKey:@"applyToNetwork"];
+    [preferences setInteger:[isAsyncKeysFirst state] forKey:@"isAsyncKeysFirst"];
+    [preferences setInteger:[isAutoLogin state] forKey:@"isAutoLogin"];
 	[preferences synchronize];
 }
 
@@ -370,6 +394,11 @@
 {
 	[window center];
 	[self loadPrefs];
+    
+    //AutoLogin
+    if ([isAutoLogin state]==NSOnState) {
+        [self doAutoConnect];
+    }
 }
 
 
@@ -387,6 +416,7 @@
 {
 	// Reize drawer to full height after opening
 	NSSize size = [drawer maxContentSize];
+    size.height+=40;
 	[drawer setContentSize: size];
 }
 - (BOOL)drawerShouldClose:(NSDrawer *)sender
@@ -425,8 +455,10 @@
 	[alert addButtonWithTitle: @"Don't quit"];
 
 	if ([alert runModal] == NSAlertFirstButtonReturn) {
+        [alert release];
 		return NSTerminateNow;
 	} else {
+        [alert release];
 		return NSTerminateCancel;
 	}
 }
@@ -435,31 +467,118 @@
 // Confirm with user before closing window
 - (BOOL)windowShouldClose:(id)theWindow
 {
+    /*
 	if ([self applicationShouldTerminate: NSApp]) {
 		windowHasBeenClosed = true;
 		return YES;
 	} else {
 		return NO;
 	}
+     */
+    //hide window to status bar.
+    [window orderOut:self];
+    return NO;
 }
 
 
 // Make sure to disconnect from SSH when terminating
 - (void)applicationWillTerminate:(NSApplication *)theApplication
 {
-	if (isConnected) {
-		[sshInterface disconnectFromServer];
-		[sshInterface dealloc];
-	}
-	return;
+	[self quitApp];
+    return;
+}
+
+-(void)quitApp:(id)sender{
+    if (isConnected) {
+        [sshInterface disconnectFromServer];
+        [sshInterface dealloc];
+    }
+    if (sender) {
+        [NSApp terminate:sender];
+    }
+}
+//open window when click
+-(BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
+{
+    [window makeKeyAndOrderFront:nil];
+    return YES;
 }
 
 
 // Terminate when window is closed
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication
 {
-	return YES;
+	return NO;
 }
 
+- (void) applicationDidFinishLaunching:(NSNotification *)notification
+{
+    NSMenu *menu = [self createMenu];
+    
+    statusItem = [[[NSStatusBar systemStatusBar]
+                   statusItemWithLength:NSSquareStatusItemLength] retain];
+    [statusItem setMenu:menu];
+    [statusItem setHighlightMode:YES];
+    [statusItem setToolTip:@"Secret Socks"];
+    
+    [self showEnableIcon];
+    
+    [menu release];
+    
+    [window center];
+	[self loadPrefs];
+    if ([self doAutoConnect])
+    {
+        [self showEnableIcon];
+        [window orderOut:self];
+    } else {
+        [self showDisableIcon];
+    }
+}
+
+- (void)showEnableIcon
+{
+    NSImage *img = [[NSImage alloc] initWithContentsOfFile:[thisBundle pathForResource:@"locked-socks" ofType:@"png"]];
+    
+    [statusItem setImage:img];
+    [img release];
+}
+
+- (void)showDisableIcon
+{
+    NSImage *img = [[NSImage alloc] initWithContentsOfFile:[thisBundle pathForResource:@"locked-socks-disable" ofType:@"png"]];
+    
+    [statusItem setImage:img];
+    [img release];
+}
+
+- (NSMenu *) createMenu
+{
+    NSZone *menuZone = [NSMenu menuZone];
+    NSMenu *menu = [[NSMenu allocWithZone:menuZone] init];
+    NSMenuItem *menuItem;
+    
+    // Add To Items
+    menuItem = [menu addItemWithTitle:@"Open Window"
+                               action:@selector(openWindow)
+                        keyEquivalent:@""];
+    [menuItem setTarget:self];
+    // Add Separator
+    [menu addItem:[NSMenuItem separatorItem]];
+    
+    // Add Quit Action
+    menuItem = [menu addItemWithTitle:@"Quit"
+                               action:@selector(quitApp:)
+                        keyEquivalent:@""];
+    [menuItem setToolTip:@"Click to Quit this App"];
+    [menuItem setTarget:self];
+    return menu;
+}
+
+- (void) openWindow
+{
+    [window makeKeyAndOrderFront:nil];
+    [window setLevel: NSStatusWindowLevel];
+}
 
 @end
