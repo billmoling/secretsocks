@@ -66,12 +66,11 @@
 - (void)toggleSOCKSSetting:(bool)status;
 - (void)loadPrefs;
 - (void)savePrefs;
-- (void)applicationWillFinishLaunching: (NSNotification *)aNotification;
 - (BOOL)drawerShouldOpen:(NSDrawer *)sender;
 - (BOOL)drawerShouldClose:(NSDrawer *)sender;
 - (void)drawerDidOpen:(NSNotification *)notification;
 - (void)windowDidMiniaturize:(NSNotification *)notification;
-- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)theSender;
+//- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)theSender;
 - (BOOL)windowShouldClose:(id)theWindow;
 - (void)applicationWillTerminate:(NSApplication *)theApplication;
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication;
@@ -79,7 +78,7 @@
 //Add by Ling
 -(bool)doAutoConnect;
 -(IBAction)stateChanged:(id)sender;
--(void)quitApp;
+-(void)quitApp:(id)sender;;
 -(bool)checkConnection;
 -(void)showDisableIcon;
 -(void)showEnableIcon;

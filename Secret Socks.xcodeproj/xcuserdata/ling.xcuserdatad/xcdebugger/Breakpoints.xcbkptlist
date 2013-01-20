@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SecretSocksController.m"
-         timestampString = "380372197.935473"
+         timestampString = "380374313.752607"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "533"
-         endingLineNumber = "533"
+         startingLineNumber = "524"
+         endingLineNumber = "524"
          landmarkName = "-applicationDidFinishLaunching:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -60,11 +60,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SecretSocksController.m"
-         timestampString = "380372197.935473"
+         timestampString = "380374313.752607"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "494"
-         endingLineNumber = "494"
+         startingLineNumber = "485"
+         endingLineNumber = "485"
          landmarkName = "-windowShouldClose:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -73,11 +73,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SecretSocksController.m"
-         timestampString = "380372197.935473"
+         timestampString = "380374313.752607"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "502"
-         endingLineNumber = "502"
+         startingLineNumber = "493"
+         endingLineNumber = "493"
          landmarkName = "-applicationWillTerminate:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -86,11 +86,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SecretSocksController.m"
-         timestampString = "380372197.935473"
+         timestampString = "380374313.752607"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "564"
-         endingLineNumber = "564"
+         startingLineNumber = "555"
+         endingLineNumber = "555"
          landmarkName = "-showEnableIcon"
          landmarkType = "5">
       </FileBreakpoint>
@@ -99,11 +99,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SecretSocksController.m"
-         timestampString = "380372197.935473"
+         timestampString = "380374313.752607"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "573"
-         endingLineNumber = "573"
+         startingLineNumber = "564"
+         endingLineNumber = "564"
          landmarkName = "-showDisableIcon"
          landmarkType = "5">
       </FileBreakpoint>
@@ -112,11 +112,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SecretSocksController.m"
-         timestampString = "380372197.935473"
+         timestampString = "380374313.752607"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "582"
-         endingLineNumber = "582"
+         startingLineNumber = "573"
+         endingLineNumber = "573"
          landmarkName = "-createMenu"
          landmarkType = "5">
       </FileBreakpoint>
@@ -125,11 +125,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SecretSocksController.m"
-         timestampString = "380372864.551395"
+         timestampString = "380374313.752607"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "508"
-         endingLineNumber = "508"
+         startingLineNumber = "499"
+         endingLineNumber = "499"
          landmarkName = "-quitApp:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -138,11 +138,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SecretSocksController.m"
-         timestampString = "380372867.532757"
+         timestampString = "380374313.752607"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "520"
-         endingLineNumber = "520"
+         startingLineNumber = "511"
+         endingLineNumber = "511"
          landmarkName = "-applicationShouldHandleReopen:hasVisibleWindows:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -151,11 +151,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SecretSocksController.m"
-         timestampString = "380372881.628803"
+         timestampString = "380374313.752607"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "528"
-         endingLineNumber = "528"
+         startingLineNumber = "519"
+         endingLineNumber = "519"
          landmarkName = "-applicationShouldTerminateAfterLastWindowClosed:"
          landmarkType = "5">
       </FileBreakpoint>

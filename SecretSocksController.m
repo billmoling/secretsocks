@@ -490,7 +490,7 @@
 // Make sure to disconnect from SSH when terminating
 - (void)applicationWillTerminate:(NSApplication *)theApplication
 {
-	[self quitApp];
+	[self quitApp:self];
     return;
 }
 

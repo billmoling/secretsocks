@@ -137,12 +137,12 @@
     
     // Make sure the task has actually stopped!
     [task terminate];
-    /*
+    
    while ((data = [[[task standardOutput] fileHandleForReading] availableData]) && [data length])
    {
        [controller appendOutput: [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]];
    }
-*/
+
    // we tell the controller that we finished, via the callback, and then blow away our connection
    // to the controller.  NSTasks are one-shot (not for reuse), so we might as well be too.
    [controller processFinished];
