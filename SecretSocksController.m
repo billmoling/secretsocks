@@ -11,6 +11,7 @@
 
 
 - (id)init {
+    NSLog(@"init");
 	self = [super init];
 
 	isConnected = false;
@@ -26,8 +27,8 @@
       @"",@"password",
 	  @"7070", @"socksPort",
       @"30",@"timeout",
-	  [NSNumber numberWithInt:1], @"applyToNetwork",
-      [NSNumber numberWithInt:1], @"isAsyncKeysFirst",
+	  [NSNumber numberWithInt:0], @"applyToNetwork",
+      [NSNumber numberWithInt:0], @"isAsyncKeysFirst",
       [NSNumber numberWithInt:1], @"isAutoLogin",
 	  nil ]; // terminate the list
 	[preferences registerDefaults:dict];
@@ -126,7 +127,7 @@
 		[sshInterface dealloc];
         [self showDisableIcon];
 	}
-    return  isConnected;
+    return isConnected;
 }
 
 // in the near future,i will add code to check the connection status
@@ -406,21 +407,6 @@
 }
 
 
-
-// Delegate Functions
-
-- (void)applicationWillFinishLaunching:(NSNotification *)aNotification
-{
-	[window center];
-	[self loadPrefs];
-    
-    //AutoLogin
-    if ([isAutoLogin state]==NSOnState) {
-        [self doConnect:self];
-    }
-}
-
-
 // Drawer management -- the config drawer is taller than the actual window.
 // So we need some resizing trickery.
 - (BOOL)drawerShouldOpen:(NSDrawer *)sender
@@ -460,6 +446,7 @@
 	[[passwordDrawer contentView] setHidden: false];
 }
 
+/*
 // Confirm with user before terminating
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)theSender
 {
@@ -481,7 +468,7 @@
 		return NSTerminateCancel;
 	}
 }
-
+*/
 
 // Confirm with user before closing window
 - (BOOL)windowShouldClose:(id)theWindow
@@ -494,8 +481,8 @@
 		return NO;
 	}
      */
-    //hide window to status bar.
-    [window orderOut:self];
+    //hide window,but not exit
+    [window orderOut:nil];
     return NO;
 }
 
@@ -503,7 +490,7 @@
 // Make sure to disconnect from SSH when terminating
 - (void)applicationWillTerminate:(NSApplication *)theApplication
 {
-	[self quitApp:self];
+	[self quitApp];
     return;
 }
 
@@ -532,8 +519,9 @@
 	return NO;
 }
 
-- (void) applicationDidFinishLaunching:(NSNotification *)notification
+- (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
+    NSLog(@"didFinishLaunching");
     NSMenu *menu = [self createMenu];
     
     statusItem = [[[NSStatusBar systemStatusBar]
@@ -548,17 +536,23 @@
     
     [window center];
 	[self loadPrefs];
-    if ([self doAutoConnect])
+    NSLog(@"didFinishLaunching, load Prefs");
+    if ([isAutoLogin state]==NSOnState)
     {
-        [self showEnableIcon];
-        [window orderOut:self];
-    } else {
-        [self showDisableIcon];
+        NSLog(@"Start to do auto login");
+        if ([self doAutoConnect])
+        {
+            [self showEnableIcon];
+            [window orderOut:nil];
+        } else {
+            [self showDisableIcon];
+        }
     }
 }
 
 - (void)showEnableIcon
 {
+    NSLog(@"show enable Icon");
     NSImage *img = [[NSImage alloc] initWithContentsOfFile:[thisBundle pathForResource:@"locked-socks" ofType:@"png"]];
     
     [statusItem setImage:img];
@@ -567,6 +561,7 @@
 
 - (void)showDisableIcon
 {
+    NSLog(@"show disable Icon");
     NSImage *img = [[NSImage alloc] initWithContentsOfFile:[thisBundle pathForResource:@"locked-socks-disable" ofType:@"png"]];
     
     [statusItem setImage:img];
@@ -575,6 +570,7 @@
 
 - (NSMenu *) createMenu
 {
+    NSLog(@"createMenu run");
     NSZone *menuZone = [NSMenu menuZone];
     NSMenu *menu = [[NSMenu allocWithZone:menuZone] init];
     NSMenuItem *menuItem;

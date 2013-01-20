@@ -79,7 +79,7 @@
 //Add by Ling
 -(bool)doAutoConnect;
 -(IBAction)stateChanged:(id)sender;
--(void)quitApp:(id)sender;
+-(void)quitApp;
 -(bool)checkConnection;
 -(void)showDisableIcon;
 -(void)showEnableIcon;
