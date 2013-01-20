@@ -30,6 +30,7 @@
 	IBOutlet NSTextField *socksportField;
     //Add by Ling Let user to select the Timeout value
     IBOutlet NSTextField *timeoutField;
+    
 	IBOutlet NSButton *applyToNetwork;
 	IBOutlet NSButton *toggleDrawer;
     //Add by Ling
