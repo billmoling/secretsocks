@@ -3,7 +3,7 @@
 //  Secret Socks
 //
 //  Created by Joshua Chan on 11/07/09.
-//
+//  Enhanced by Ling Mo on 20/01/2012
 
 #import <Cocoa/Cocoa.h>
 #import "ssh_interface.h"
@@ -14,7 +14,7 @@
 //#import <Security/Authorization.h>
 
 // Number of seconds to wait for SSH to connect
-#define SSH_TIMEOUT 10
+#define SSH_TIMEOUT 30
 
 @interface SecretSocksController : NSObject <TaskWrapperController> 
 {
@@ -28,9 +28,15 @@
 	IBOutlet NSTextField *usernameField;
 	IBOutlet NSTextField *passwordField;
 	IBOutlet NSTextField *socksportField;
+    //Add by Ling Let user to select the Timeout value
+    IBOutlet NSTextField *timeoutField;
 	IBOutlet NSButton *applyToNetwork;
 	IBOutlet NSButton *toggleDrawer;
-
+    //Add by Ling
+    IBOutlet NSButton *isAsyncKeysFirst;
+    IBOutlet NSButton *isAutoLogin;
+    IBOutlet NSTextView *helpText;
+    
 	IBOutlet NSTextView *statusLabel;
 	IBOutlet NSButton *connectButton;
 	IBOutlet NSImageView *checkmark;
@@ -41,12 +47,15 @@
 	IBOutlet NSDrawer *passwordDrawer;
 	IBOutlet NSTextField *passwordField2;
 
+    NSThread *sshThread;
+    NSString *key;
 	ssh_interface *sshInterface;
 	bool isConnected;
 	bool windowHasBeenClosed;
 	NSBundle *thisBundle;
 	
 	NSUserDefaults *preferences;
+    NSStatusItem *statusItem;
 }
 
 - (id)init;
@@ -67,5 +76,14 @@
 - (BOOL)windowShouldClose:(id)theWindow;
 - (void)applicationWillTerminate:(NSApplication *)theApplication;
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication;
+
+//Add by Ling
+-(bool)doAutoConnect;
+-(IBAction)stateChanged:(id)sender;
+-(void)quitApp;
+-(bool)checkConnection;
+-(void)showDisableIcon;
+-(void)showEnableIcon;
+
 
 @end

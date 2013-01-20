@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D4A263416ABB108008C89AA /* locked-socks-disable.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D4A263216ABB108008C89AA /* locked-socks-disable.png */; };
+		3D4A263516ABB108008C89AA /* locked-socks.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D4A263316ABB108008C89AA /* locked-socks.png */; };
 		3D82458B16A6DEAA00C89897 /* locked-socks.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5BA31E17100E6B0900C5F597 /* locked-socks.icns */; };
 		5B35951B1007DB660060C42D /* ssh_interface.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35951A1007DB660060C42D /* ssh_interface.m */; };
 		5B35952110085F8F0060C42D /* SecretSocksController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35952010085F8F0060C42D /* SecretSocksController.m */; };
@@ -32,6 +34,8 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* Secret Socks_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Secret Socks_Prefix.pch"; sourceTree = "<group>"; };
+		3D4A263216ABB108008C89AA /* locked-socks-disable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "locked-socks-disable.png"; sourceTree = "<group>"; };
+		3D4A263316ABB108008C89AA /* locked-socks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "locked-socks.png"; sourceTree = "<group>"; };
 		5B3595191007DB650060C42D /* ssh_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssh_interface.h; sourceTree = "<group>"; };
 		5B35951A1007DB660060C42D /* ssh_interface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ssh_interface.m; sourceTree = "<group>"; };
 		5B35951F10085F8F0060C42D /* SecretSocksController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecretSocksController.h; sourceTree = "<group>"; };
@@ -128,6 +132,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3D4A263216ABB108008C89AA /* locked-socks-disable.png */,
+				3D4A263316ABB108008C89AA /* locked-socks.png */,
 				5BE5DCDF100ED128004C4DF5 /* getservice */,
 				5BA31E17100E6B0900C5F597 /* locked-socks.icns */,
 				5B3599F9100A79D90060C42D /* path4068.png */,
@@ -205,6 +211,8 @@
 				5B359DE1100BE3A00060C42D /* Credits.html in Resources */,
 				5BEC78C010506C45007DF70A /* getservice.py in Resources */,
 				3D82458B16A6DEAA00C89897 /* locked-socks.icns in Resources */,
+				3D4A263416ABB108008C89AA /* locked-socks-disable.png in Resources */,
+				3D4A263516ABB108008C89AA /* locked-socks.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
